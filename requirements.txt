@@ -1,0 +1,4 @@
+langgraph==1.2.12
+langchain-anthropic==1.7.4
+python-dotenv==1.2.3
+tzdata==2026.4

@@ -68,7 +68,7 @@ HERRAMIENTAS = [calcular, hora_actual]
 # --- Grafo --------------------------------------------------------------------
 
 
-def construir_agente():
+def construir_agente(con_memoria: bool = True):
     modelo = ChatAnthropic(
         model=os.getenv("MODEL", "claude-sonnet-5"),
         max_tokens=1024,
@@ -86,7 +86,12 @@ def construir_agente():
     grafo.add_conditional_edges("modelo", tools_condition)
     grafo.add_edge("tools", "modelo")
 
-    return grafo.compile(checkpointer=MemorySaver())
+    # Studio / langgraph dev manejan su propia persistencia: ahí va sin checkpointer.
+    return grafo.compile(checkpointer=MemorySaver() if con_memoria else None)
+
+
+# Grafo exportado para LangGraph Studio (`langgraph dev`, ver langgraph.json).
+graph = construir_agente(con_memoria=False)
 
 
 def main():
